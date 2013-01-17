@@ -27,7 +27,7 @@ PUT    posts/{id}
 PATCH  posts/{id}
 DELETE posts/{id}
 GET    posts/{id}/delete
-
+```
 
 and will map them to:
 ```
@@ -73,6 +73,24 @@ sub-resource methods are(e.g. comment)
 @updateComment
 @deleteComment
 ```
+with the following routes:
+```
+GET    comments
+GET    posts/{id}/comments
+GET    posts/{id}/comments/
+POST   posts/{id}/comments
+POST   posts/{id}/comments/
+GET    posts/create
+GET    posts/create/
+GET    posts/{id}
+GET    posts/{id}/
+GET    posts/{id}/edit
+PUT    posts/{id}
+PATCH  posts/{id}
+DELETE posts/{id}
+GET    posts/{id}/delete
+```
+
 no mass  assigment routes are created
 
 'Resource' will also set the named routes for the resource. For example "posts" would be set as:
