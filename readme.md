@@ -44,7 +44,6 @@ Resource::route('ox' [
 	'before'    => 'auth|admin',  // set before filters
 	'after'     => 'tokenify',    // set after  filters
 	'resources' => 'oxen',        // the resource plural name (automatically inflected if not provided)
-	'mode'      => 'strict',      // enabled|disable trailing slashes and redirect codes
 	'adds'      => 'flag|unflag'  // add extra routes to methods with the same name. Currently only GET routes are supported, but "post:flag|delete:flag" format may be added in future
     'format'    => 'xml|json|'    // add dot separated extended routes(e.g /posts/234.xml and /posts/234.json )
     //'regex'   => '\d+'          // set validator ( not yet implemented )
@@ -66,6 +65,7 @@ Resourceful methods are:
 sub-resource methods are(e.g. comment)
 ```
 @commentsIndex
+@AllCommentsIndex  // subresource index as root
 @showComment
 @storeComment
 @editComment
@@ -103,6 +103,20 @@ if any options arr added to the "adds" field (e.g. flag):
 flag_post
 custom_post
 etc
+for subresources:
+all_resources  // index as root
+resources      // index per each main resource
+```
+
+
+updates:
+
+trailing slash support has been removed. If you need such emulation I recommend you add the following catch-all route to the end of your routes.php
+
+```php
+Route::get('{any}', function($url){
+    return Redirect::to(mb_substr($url, 0, -1), 301);
+})->where('any', '(.*)\/$');
 ```
 
 
