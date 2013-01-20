@@ -15,18 +15,20 @@ will create the following routes:
 
 ```
 GET    posts
-GET    posts/
 POST   posts
-POST   posts/
 GET    posts/create
-GET    posts/create/
 GET    posts/{id}
-GET    posts/{id}/
 GET    posts/{id}/edit
 PUT    posts/{id}
 PATCH  posts/{id}
 DELETE posts/{id}
 GET    posts/{id}/delete
+// and optionally:
+GET    posts.json|xml
+GET    posts/123.json|xml
+GET    posts/123/edit.json|xml
+GET    posts/123/delete
+GET    posts/new
 ```
 
 and will map them to:
@@ -44,10 +46,12 @@ Resource::route('ox' [
 	'before'    => 'auth|admin',  // set before filters
 	'after'     => 'tokenify',    // set after  filters
 	'resources' => 'oxen',        // the resource plural name (automatically inflected if not provided)
-	'adds'      => 'flag|unflag'  // add extra routes to methods with the same name. Currently only GET routes are supported, but "post:flag|delete:flag" format may be added in future
-    'format'    => 'xml|json|'    // add dot separated extended routes(e.g /posts/234.xml and /posts/234.json )
+	'action'    => 'flag|unflag'  // add extra routes to methods with the same name. Currently only GET routes are supported, but "post:flag|delete:flag" format may be added in future
+    'formats'   => 'xml|json|'    // add dot separated extended routes(e.g /posts/234.xml and /posts/234.json )
     //'regex'   => '\d+'          // set validator ( not yet implemented )
     'embed'     => true|false     // if set to true, will match to methods on the parent controller instead of a separate controller
+    'handles'   => 'admin'        // prefix with a namespace
+    'mode'      => 'fuzzy'        // enable some extra convenience routes (e.g. GET resource/{id}/delete )
 ]);
 ```
 
@@ -77,13 +81,9 @@ with the following routes:
 ```
 GET    comments
 GET    posts/{id}/comments
-GET    posts/{id}/comments/
 POST   posts/{id}/comments
-POST   posts/{id}/comments/
 GET    posts/create
-GET    posts/create/
 GET    posts/{id}
-GET    posts/{id}/
 GET    posts/{id}/edit
 PUT    posts/{id}
 PATCH  posts/{id}
@@ -100,8 +100,8 @@ post
 new_post
 edit_post
 if any options arr added to the "adds" field (e.g. flag):
-flag_post
-custom_post
+flag_post  // maps to Controller@flag
+star_post  // maps to Controller@star
 etc
 for subresources:
 all_resources  // index as root
